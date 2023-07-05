@@ -49,6 +49,7 @@ class RemoteFeedLoaderTest: XCTestCase {
         let (sut, client) = makeSUT()
         
         let samples = [199, 201, 300, 400, 500]
+        
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: .failure(.invalidData), when: {
                 let json = makeItemsJSON([])
@@ -70,7 +71,7 @@ class RemoteFeedLoaderTest: XCTestCase {
         let (sut, client) = makeSUT()
         
         expect(sut, toCompleteWith: .success([]), when: {
-                    let emptyListJSON = Data(bytes: "{\"items\": []}".utf8)
+                    let emptyListJSON = makeItemsJSON([])
                     client.complete(withStatusCode: 200, data: emptyListJSON)
                 })
     }
@@ -116,7 +117,7 @@ class RemoteFeedLoaderTest: XCTestCase {
     }
     
     private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
-        let json = [ "items": [items]]
+        let json = [ "items": items]
         return try! JSONSerialization.data(withJSONObject: json)
     }
     
